@@ -1,30 +1,46 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css'; 
+
+import Home from './components/Home';
+import Register from './components/Register';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <nav>
-          <h1>CineRedux Customer Portal</h1>
-        </nav>
-      </header>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <nav>
+            <ClickableH1 />
+          </nav>
+        </header>
 
-      <main>
-        <section className="hero-section">
-          <div className="hero-content">
-            <h2>Welcome to CineRedux</h2>
-            <p>Experience seamless and secure international payments through our modern and easy-to-use platform.</p>
-            <button className="cta-button">Get Started</button>
-          </div>
-        </section>
-      </main>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Routes>
+        </main>
 
-      <footer>
-        <p>&copy; {new Date().getFullYear()} CineRedux. All rights reserved.</p>
-      </footer>
-    </div>
+        <footer>
+          <p>&copy; {new Date().getFullYear()} CineRedux. All rights reserved.</p>
+        </footer>
+      </div>
+    </Router>
   );
 }
 
+function ClickableH1() {
+  const navigate = useNavigate();
+
+  return (
+    <h1 onClick={() => navigate('/')} style={{ cursor: 'pointer', userSelect: 'none' }}>
+      CineRedux Customer Portal
+    </h1>
+  );
+}
 export default App;
