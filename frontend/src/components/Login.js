@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+//import axios from 'axios';
+import api from '../axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import './styles/Login.css';
 
@@ -40,7 +41,7 @@ function Login() {
     if (!validate()) return;
 
     try {
-      const response = await axios.post('/api/auth/login', form, { https: true });
+      const response = await api.post('/api/users/login', form, { https: true });
       if (response.data.success) {
         // Store token or session info as needed
         navigate('/dashboard');
