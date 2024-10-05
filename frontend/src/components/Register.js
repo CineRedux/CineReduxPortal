@@ -18,7 +18,7 @@ function Register() {
     fullName: /^[A-Za-z\s]{2,50}$/,
     idNumber: /^\d{13}$/,
     accountNumber: /^\d{10,12}$/,
-    password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};':"\\|,.<>\/?`~-]{8,}$/
+    password: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/
   };
 
   const handleChange = (e) => {

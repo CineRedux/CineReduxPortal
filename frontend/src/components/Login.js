@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './styles/Login.css';
 
 function Login() {
   const navigate = useNavigate();
@@ -68,6 +69,9 @@ function Login() {
         </label>
         <button type="submit">Login</button>
       </form>
+      <p className="register-link" onClick={() => navigate('/register')}>
+          Don't have an account? <span>Create one</span>
+      </p>
     </div>
   );
 }

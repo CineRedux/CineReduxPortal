@@ -6,7 +6,8 @@ function Dashboard() {
     amount: '',
     currency: 'ZAR',
     provider: 'SWIFT',
-    payeeAccount: '',
+    beneficiaryName: '',
+    beneficiaryAccountNumber: '',
     swiftCode: ''
   });
   const [message, setMessage] = useState('');
@@ -16,7 +17,8 @@ function Dashboard() {
   const regex = {
     amount: /^\d+(\.\d{1,2})?$/,
     currency: /^[A-Z]{3}$/,
-    payeeAccount: /^\d{10,12}$/,
+    beneficiaryName: /^[a-zA-Z\s]+$/,
+    beneficiaryAccountNumber: /^\d{10,12}$/,
     swiftCode: /^[A-Z]{6}[A-Z0-9]{2,5}$/
   };
 
@@ -48,7 +50,8 @@ function Dashboard() {
           amount: '',
           currency: 'ZAR', 
           provider: 'SWIFT',
-          payeeAccount: '',
+          beneficiaryName: '',
+          beneficiaryAccountNumber: '',
           swiftCode: ''
         });
       }
@@ -81,8 +84,12 @@ function Dashboard() {
           </select>
         </label>
         <label>
-          Payee Account:
-          <input type="text" name="payeeAccount" value={payment.payeeAccount} onChange={handleChange} required />
+          Beneficiary Name:
+          <input type="text" name="beneficiaryName" value={payment.beneficiaryName} onChange={handleChange} required />
+        </label>
+        <label>
+          Beneficiary Account Number:
+          <input type="text" name="beneficiaryAccountNumber" value={payment.beneficiaryAccountNumber} onChange={handleChange} required />
         </label>
         <label>
           SWIFT Code:
