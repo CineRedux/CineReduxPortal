@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../axiosConfig'; // Use your configured axios instance
 import { useNavigate } from 'react-router-dom';
-import './styles/Login.css';
 
 function Login() {
   const navigate = useNavigate();
@@ -11,7 +10,6 @@ function Login() {
     password: ''
   });
   const [error, setError] = useState('');
-
 
   const regex = {
     username: /^[A-Za-z0-9_]{3,30}$/,
@@ -40,9 +38,8 @@ function Login() {
     if (!validate()) return;
 
     try {
-      const response = await axios.post('/api/auth/login', form, { https: true });
+      const response = await api.post('/api/auth/login', form); // Use api instance
       if (response.data.success) {
-        // Store token or session info as needed
         navigate('/dashboard');
       }
     } catch (err) {
@@ -69,9 +66,6 @@ function Login() {
         </label>
         <button type="submit">Login</button>
       </form>
-      <p className="register-link" onClick={() => navigate('/register')}>
-          Don't have an account? <span>Create one</span>
-      </p>
     </div>
   );
 }

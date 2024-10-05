@@ -1,13 +1,9 @@
-const https = require('https');
-const fs = require('fs');
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-//const mongoose = require('mongoose');
-//const connectDB = require('./config/db');
-//const authRoutes = require('./routes/authRoutes');
-//const paymentRoutes = require('./routes/paymentRoutes');
-const dotenv = require('dotenv');
+import express from 'express';
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import cors from 'cors';
+import userRoutes from './routes/userRoutes';
+
 
 
 // SSL enforcement and server listening
@@ -17,29 +13,31 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors());
-app.use(helmet());
+// Middleware for JSON
 app.use(express.json());
 
-// Database connection
-//connectDB();
+// Enable CORS for all routes
+app.use(cors());
 
-// Routes
-//app.use('/api/auth', authRoutes);
-//app.use('/api/payments', paymentRoutes);
+// Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI_LOCAL || process.env.MONGO_URI_ATLAS, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+    .then(() => {
+        console.log('MongoDB connected');
 
-app.get('/api/test', (req, res) => {
-    res.status(200).json({ message: 'Server is running and SSL is functioning' });
+        // Use the user routes
+        app.use('/api/users', userRoutes);
+
+        // Set the port
+        const PORT = process.env.PORT || 3000;
+
+        app.listen(PORT, () => {
+            console.log(`Server running on port ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.error('MongoDB connection error:', err);
+        process.exit(1);
     });
-
-const server = https.createServer({
-  key: fs.readFileSync('keys/privatekey.pem'),
-  cert: fs.readFileSync('keys/certificate.pem')
-}, app);
-
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-
