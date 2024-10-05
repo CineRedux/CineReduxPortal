@@ -2,12 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import userRoutes from './routes/userRoutes';
-
-
+import userRoutes from './routes/userRoutes.js';
+import https from 'https';
+import fs from 'fs';
 
 // SSL enforcement and server listening
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5001;
 
 dotenv.config();
 
@@ -20,7 +20,7 @@ app.use(express.json());
 app.use(cors());
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI_LOCAL || process.env.MONGO_URI_ATLAS, {
+mongoose.connect(process.env.MONGO_URI_ATLAS || process.env.MONGO_URI_LOCAL , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 })
@@ -30,12 +30,14 @@ mongoose.connect(process.env.MONGO_URI_LOCAL || process.env.MONGO_URI_ATLAS, {
         // Use the user routes
         app.use('/api/users', userRoutes);
 
-        // Set the port
-        const PORT = process.env.PORT || 3000;
-
-        app.listen(PORT, () => {
+        const server = https.createServer({
+            key: fs.readFileSync('keys/privatekey.pem'),
+            cert: fs.readFileSync('keys/certificate.pem')
+          }, app);
+          
+          server.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
-        });
+          });
     })
     .catch((err) => {
         console.error('MongoDB connection error:', err);

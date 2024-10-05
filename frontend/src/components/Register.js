@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import api from '../axiosConfig'; // Use your configured axios instance
+import axios from 'axios';
+import './styles/App.css';
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
@@ -12,11 +13,12 @@ function Register() {
   });
   const [error, setError] = useState('');
 
+
   const regex = {
     fullName: /^[A-Za-z\s]{2,50}$/,
     idNumber: /^\d{13}$/,
     accountNumber: /^\d{10,12}$/,
-    password: /^(?=.*[A-Z])(?=.*\d)[A-Za-z\d!@#$%^&*()_+[\]{};':"\\|,.<>\/?`~-]{8,}$/
+    password: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$/
   };
 
   const handleChange = (e) => {
@@ -40,9 +42,9 @@ function Register() {
     if (!validate()) return;
 
     try {
-      const response = await api.post('/api/auth/register', form); // Use api instance
+      const response = await axios.post('/api/auth/register', form, { https: true });
       if (response.data.success) {
-        navigate('/dashboard');
+        navigate('/login');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');

@@ -1,0 +1,22 @@
+  
+  .error-message {
+    color: red;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .register-link {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: #007bff;
+    cursor: pointer;
+  }
+  
+  .register-link span {
+    text-decoration: underline;
+  }
+  
+  .register-link:hover {
+    color: #0056b3;
+  }
+  
