@@ -12,8 +12,8 @@ const paymentSchema = new mongoose.Schema({
     beneficiaryName: { type: String, required: true },
     beneficiaryAccountNumber: { type: String, required: true },
     swiftCode: { type: String, required: true },
-    createdAt: { type: Date, default: Date.now },
-});
+    }, 
+    { timestamps: true });
 
 
 export default mongoose.model('Payment', paymentSchema);

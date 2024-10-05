@@ -1,10 +1,9 @@
-server 
-
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import userRoutes from './routes/userRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import https from 'https';
 import fs from 'fs';
 
@@ -31,7 +30,7 @@ mongoose.connect(process.env.MONGO_URI_ATLAS || process.env.MONGO_URI_LOCAL , {
 
         // Use the user routes
         app.use('/api/users', userRoutes);
-
+        app.use('/api/payments', paymentRoutes);
         const server = https.createServer({
             key: fs.readFileSync('keys/privatekey.pem'),
             cert: fs.readFileSync('keys/certificate.pem')

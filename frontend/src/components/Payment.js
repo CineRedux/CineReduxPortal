@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../axiosConfig';
+import { jwtDecode } from 'jwt-decode';
 
 function Dashboard() {
   const [payment, setPayment] = useState({
@@ -28,7 +29,7 @@ function Dashboard() {
 
   const validate = () => {
     for (let key in payment) {
-      if (!regex[key].test(payment[key])) {
+      if (regex[key] && !regex[key].test(payment[key])) {
         setMessage(`Invalid ${key}`);
         return false;
       }
@@ -43,7 +44,12 @@ function Dashboard() {
     if (!validate()) return;
 
     try {
-      const response = await axios.post('/api/payments/create', payment, { https: true });
+      const token = sessionStorage.getItem('token');
+      const decoded = jwtDecode(token);
+      const userId = decoded.id;
+      const paymentData = { ...payment, userId };
+
+      const response = await api.post('/api/payments/create', paymentData, { https: true });
       if (response.data.success) {
         setMessage('Payment initiated successfully');
         setPayment({
