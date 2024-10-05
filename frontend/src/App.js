@@ -5,7 +5,7 @@ import './App.css';
 import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
-import Dashboard from './components/Dashboard';
+import Payment from './components/Payment';
 
 function App() {
   return (
@@ -22,7 +22,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/Payment" element={<Payment />} />
           </Routes>
         </main>
 

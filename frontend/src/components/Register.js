@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../axiosConfig';
 import './styles/App.css';
 import { useNavigate } from 'react-router-dom';
 
 function Register() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
+    email: '', // Add email to the state
     fullName: '',
     idNumber: '',
     accountNumber: '',
@@ -13,8 +14,8 @@ function Register() {
   });
   const [error, setError] = useState('');
 
-
   const regex = {
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     fullName: /^[A-Za-z\s]{2,50}$/,
     idNumber: /^\d{13}$/,
     accountNumber: /^\d{10,12}$/,
@@ -40,9 +41,8 @@ function Register() {
     setError('');
 
     if (!validate()) return;
-
     try {
-      const response = await axios.post('/api/auth/register', form, { https: true });
+      const response = await api.post('/api/users/register', form, { https: true });
       if (response.data.success) {
         navigate('/login');
       }
@@ -56,6 +56,10 @@ function Register() {
       <h2>Register</h2>
       {error && <p className="error-message">{error}</p>}
       <form onSubmit={handleSubmit}>
+        <label>
+          Email: {/* Add email label */}
+          <input type="email" name="email" value={form.email} onChange={handleChange} required />
+        </label>
         <label>
           Full Name:
           <input type="text" name="fullName" value={form.fullName} onChange={handleChange} required />

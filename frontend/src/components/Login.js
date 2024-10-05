@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-//import axios from 'axios';
 import api from '../axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import './styles/Login.css';
@@ -15,7 +14,7 @@ function Login() {
 
 
   const regex = {
-    username: /^[A-Za-z0-9_]{3,30}$/,
+    username: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     accountNumber: /^\d{10,12}$/,
     password: /^.{8,}$/
   };
@@ -39,17 +38,18 @@ function Login() {
     setError('');
 
     if (!validate()) return;
-
     try {
       const response = await api.post('/api/users/login', form, { https: true });
-      if (response.data.success) {
-        // Store token or session info as needed
-        navigate('/dashboard');
+      if (response.data.message === "Success") {
+        sessionStorage.setItem('token', response.data.token);
+        
+        navigate('/Payment');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
     }
-  };
+};
+
 
   return (
     <div className="form-container">
