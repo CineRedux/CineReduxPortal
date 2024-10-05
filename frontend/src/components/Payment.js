@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import api from '../axiosConfig';
 import { jwtDecode } from 'jwt-decode';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
+  const navigate = useNavigate();
   const [payment, setPayment] = useState({
     amount: '',
     currency: 'ZAR',
@@ -60,6 +62,7 @@ function Dashboard() {
           beneficiaryAccountNumber: '',
           swiftCode: ''
         });
+        navigate('/dashboard');
       }
     } catch (err) {
       setMessage(err.response?.data?.message || 'Payment failed');

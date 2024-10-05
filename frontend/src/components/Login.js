@@ -43,7 +43,7 @@ function Login() {
       if (response.data.message === "Success") {
         sessionStorage.setItem('token', response.data.token);
         
-        navigate('/Payment');
+        navigate('/payment');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Login failed');
