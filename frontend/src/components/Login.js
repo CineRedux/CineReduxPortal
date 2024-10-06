@@ -3,7 +3,7 @@ import api from '../axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import './styles/Login.css';
 
-function Login() {
+function Login({setIsLoggedIn}) {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     username: '',
@@ -42,7 +42,7 @@ function Login() {
       const response = await api.post('/api/users/login', form, { https: true });
       if (response.data.message === "Success") {
         sessionStorage.setItem('token', response.data.token);
-        
+        setIsLoggedIn(true);
         navigate('/payment');
       }
     } catch (err) {
