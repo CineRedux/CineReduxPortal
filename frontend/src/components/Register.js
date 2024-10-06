@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import api from '../axiosConfig';
 import './styles/App.css';
 import { useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 
 function Register() {
   const navigate = useNavigate();
@@ -23,7 +24,8 @@ function Register() {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const sanitizedValue = DOMPurify.sanitize(e.target.value);
+    setForm({ ...form, [e.target.name]: sanitizedValue });
   };
 
   const validate = () => {
@@ -47,7 +49,7 @@ function Register() {
         navigate('/login');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      setError('Registration failed, please try again');
     }
   };
 

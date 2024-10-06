@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import api from '../axiosConfig';
 import { useNavigate } from 'react-router-dom';
+import DOMPurify from 'dompurify';
 import './styles/Login.css';
 
 function Login({setIsLoggedIn}) {
@@ -20,7 +21,8 @@ function Login({setIsLoggedIn}) {
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const sanitizedValue = DOMPurify.sanitize(e.target.value); 
+    setForm({ ...form, [e.target.name]: sanitizedValue });
   };
 
   const validate = () => {
@@ -46,7 +48,7 @@ function Login({setIsLoggedIn}) {
         navigate('/payment');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Login failed');
+      setError('Login failed, please check your credentials');
     }
 };
 
