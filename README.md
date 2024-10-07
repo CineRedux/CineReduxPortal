@@ -1,196 +1,141 @@
-To create a detailed `README.md` file for your CineReduxPortal project, we’ll cover essential sections that give an overview of the project, its setup, technologies, usage, and other relevant information. Here’s a template you can customize:
+# CineRedux Customer Portal
 
----
-
-# CineReduxPortal
-
-CineReduxPortal is a movie management platform designed to allow users to explore movies, add them to a watchlist, and initiate secure international payments for premium features. This repository includes both the backend (Node.js) and frontend components of the CineRedux application.
+CineRedux Customer Portal is a React-based web application that allows users to register, login, and make payments within the portal. The application features secure registration, login functionality, and integrates with backend APIs to manage user information and transactions.
 
 ## Table of Contents
-- [Project Overview](#project-overview)
+
 - [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-  - [Prerequisites](#prerequisites)
-  - [Backend Setup](#backend-setup)
-  - [Frontend Setup](#frontend-setup)
-- [Environment Variables](#environment-variables)
+- [Technologies](#technologies)
+- [Prerequisites](#prerequisites)
+- [Setup](#setup)
 - [Usage](#usage)
-  - [Starting the Backend](#starting-the-backend)
-  - [Starting the Frontend](#starting-the-frontend)
-  - [API Endpoints](#api-endpoints)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
+- [Project Structure](#project-structure)
+- [API Routes](#api-routes)
+- [Team Members](#team-members)
 
-## Project Overview
-
-CineReduxPortal provides users with the ability to:
-- Browse trending movies
-- Add movies to their watchlist
-- View detailed information about a selected movie
-- Perform secure payments for premium features such as exclusive movie access using international payment systems
-
-The project is divided into:
-- **Backend**: API for managing movie data, watchlist, and payment transactions.
-- **Frontend**: A user interface that communicates with the backend for movie details, watchlist management, and payment features.
 
 ## Features
 
-- **Movie Search and Details**: Users can search for movies by name and view detailed information like title, overview, poster, year, and Rotten Tomatoes ratings.
-- **Watchlist Management**: Users can add or remove movies from their watchlist.
-- **International Payments**: Users can make secure payments for premium services.
-- **Google Sign-In**: Users can log in using their Google account for a personalized experience.
+- **Registration**: Allows users to register by providing details such as email, full name, ID number, account number, and password.
+- **Login**: Enables users to authenticate using their credentials.
+- **Payments**: Users can make payments securely via the payment page.
+- **Routing**: Navigation between pages like Home, Register, Login, and Payment.
+- **Validation**: The form data is validated against specified regex patterns.
+- **Error Handling**: User-friendly error messages are displayed on validation or backend failures.
+
+## Technologies
+
+The CineRedux Customer Portal uses the following technologies:
+
+- **Frontend**:
+  - React.js: For building the UI and handling the client-side routing.
+  - Axios: For HTTP requests to the backend.
+  - React Router: For navigating between different pages.
+  - CSS: For styling the components.
   
-## Technologies Used
-
-### Backend
-- **Node.js** with **Express**
-- **MongoDB** (with Mongoose ODM)
-- **Stripe** (for payment processing)
-- **JWT** (for authentication)
-- **Google Cloud Platform** (for deployment)
+- **Backend**:
+  - The app communicates with an Express.js backend API (not included here) for user registration, login, and payment processing.
   
-### Frontend
-- **React** (or your chosen frontend framework)
-- **HTML/CSS/JavaScript**
-- **Axios** (for making API calls)
-  
-## Installation
+## Prerequisites
 
-### Prerequisites
+Before running this application, ensure you have the following installed:
 
-- Node.js installed (v14.x or later)
-- MongoDB (Local or Atlas instance)
-- Git
-- Stripe account (for payment processing)
+- [Node.js](https://nodejs.org/) (v14.x or higher)
+- [npm](https://www.npmjs.com/) (v6.x or higher)
 
-### Backend Setup
+Additionally, you'll need the backend API running to handle requests. Ensure that the backend is properly configured and running locally or deployed.
 
-1. **Clone the repository:**
+## Setup
+
+1. Clone this repository:
    ```bash
-   git clone https://github.com/CineRedux/CineReduxPortal.git
-   cd CineReduxPortal/backend
+   git clone https://github.com/your-username/cineredux-customer-portal.git
+   cd cineredux-customer-portal
    ```
 
-2. **Install dependencies:**
+2. Install the required dependencies:
    ```bash
    npm install
    ```
 
-3. **Set up environment variables**:
-   Create a `.env` file in the `backend/` directory and populate it with the following variables:
+3. Create a `.env` file in the root directory and add your environment variables (if required by the backend).
 
-   ```plaintext
-   PORT=5000
-   MONGO_URI_LOCAL=mongodb://localhost:27017/CineRedux
-   MONGO_URI_ATLAS=mongodb+srv://<username>:<password>@cluster.mongodb.net/CineRedux?retryWrites=true&w=majority
-   JWT_SECRET=your_jwt_secret_key
-   STRIPE_SECRET_KEY=your_stripe_secret_key
+4. Ensure that the `axiosConfig.js` file points to your backend URL:
+   ```js
+   const api = axios.create({
+     baseURL: 'https://localhost:5001', // Update with your backend URL
+     headers: {
+       'Content-Type': 'application/json',
+     },
+   });
    ```
 
-4. **Run the backend server:**
-   ```bash
-   npm run dev
-   ```
-   The server will run on `http://localhost:5000`.
-
-### Frontend Setup
-
-1. **Navigate to the frontend directory:**
-   ```bash
-   cd ../frontend
-   ```
-
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
-
-3. **Run the frontend server:**
+5. Start the application:
    ```bash
    npm start
    ```
-   The frontend will run on `http://localhost:3000`.
 
-## Environment Variables
-
-You will need the following environment variables for the backend server:
-
-```plaintext
-PORT=5000
-MONGO_URI_LOCAL=mongodb://localhost:27017/CineRedux
-MONGO_URI_ATLAS=mongodb+srv://<username>:<password>@cluster.mongodb.net/CineRedux?retryWrites=true&w=majority
-JWT_SECRET=your_jwt_secret_key
-STRIPE_SECRET_KEY=your_stripe_secret_key
-```
-
-### Example `.env` file:
-```plaintext
-PORT=5001
-MONGO_URI_LOCAL="mongodb://localhost:27017/CineRedux"
-MONGO_URI_ATLAS="mongodb+srv://username:password@cluster.mongodb.net/CineRedux?retryWrites=true&w=majority"
-JWT_SECRET="your_jwt_secret"
-STRIPE_SECRET_KEY="your_stripe_secret_key"
-```
+6. The application will run at `http://localhost:3000/` by default.
 
 ## Usage
 
-### Starting the Backend
+- **Register**: Navigate to `/register` and enter your details. All fields will be validated using regex patterns.
+- **Login**: Once registered, you can log in via the `/login` page.
+- **Payment**: After logging in, users can proceed to the `/payment` page for secure payments.
+
+### Form Validation Regex
+
+The registration form fields are validated against the following patterns:
+
+- **Email**: `^[^\s@]+@[^\s@]+\.[^\s@]+$`
+- **Full Name**: `^[A-Za-z\s]{2,50}$`
+- **ID Number**: `^\d{13}$`
+- **Account Number**: `^\d{10,12}$`
+- **Password**: `^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,16}$`
+
+## Project Structure
 
 ```bash
-cd backend
-npm run dev
+├── public
+│   └── index.html            # Main HTML template
+├── src
+│   ├── components
+│   │   ├── Home.js           # Home Page Component
+│   │   ├── Register.js       # Register Page Component
+│   │   ├── Login.js          # Login Page Component
+│   │   ├── Payment.js        # Payment Page Component
+│   ├── App.js                # Main Application Component
+│   ├── axiosConfig.js        # Axios API Configuration
+│   ├── index.js              # Entry point of the application
+│   ├── styles
+│   │   └── App.css           # Application-wide CSS styles
+└── package.json              # Project metadata and dependencies
 ```
 
-### Starting the Frontend
+## API Routes
 
-```bash
-cd frontend
-npm start
-```
+Ensure the backend API is properly set up with the following routes:
 
-### API Endpoints
+- **POST** `/api/users/register`: For user registration. Expects the following fields:
+  - `email`
+  - `fullName`
+  - `idNumber`
+  - `accountNumber`
+  - `password`
+  
+- **POST** `/api/users/login`: For user authentication. Expects:
+  - `email`
+  - `password`
 
-- **`POST /api/auth/register`**: Register a new user
-- **`POST /api/auth/login`**: Log in a user
-- **`GET /api/movies/trending`**: Fetch trending movies
-- **`POST /api/payments/create`**: Create a new payment
+- **POST** `/api/payments`: For processing payments. Requires authentication.
 
-Here’s an example of a payment request body:
-```json
-{
-  "amount": 2500,
-  "currency": "USD",
-  "provider": "Bank of America",
-  "beneficiaryName": "John Doe",
-  "beneficiaryAccountNumber": "123456789",
-  "swiftCode": "BOFAUS3N"
-}
-```
+You can find the backend source code or API details in the linked repository (not included in this README).
 
-## Testing
+## Team Members
 
-To run tests, first install `jest` and other testing dependencies, then run:
+This project is a collaborative effort by the following team members:
 
-```bash
-npm test
-```
+- **Ted Ngobeni** - ST10027949
+- **Tshiamo Thekiso** - ST10132516
+- **Motjoka Fanana** - ST10089515
 
-You can add test cases for individual endpoints like user registration, movie fetching, and payment processing.
-
-## Contributing
-
-We welcome contributions! Please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes and commit them (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Open a Pull Request.
-
-
-## Team Members:
-Ted Ngobeni - ST10027949 </br>
-Tshiamo Thekiso – ST10132516 </br>
-Motjoka Fanana – ST10089515
