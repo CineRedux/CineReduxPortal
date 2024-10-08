@@ -45,11 +45,11 @@ function Register() {
     if (!validate()) return;
     try {
       const response = await api.post('/api/users/register', form, { https: true });
-      if (response.data.success) {
+      if (response.status === 201) {
         navigate('/login');
       }
     } catch (err) {
-      setError('Registration failed, please try again');
+      setError(`Registration failed, ${err.response.data.message}`);
     }
   };
 

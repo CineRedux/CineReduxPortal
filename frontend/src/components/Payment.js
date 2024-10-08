@@ -53,7 +53,7 @@ function Dashboard() {
 
       const response = await api.post('/api/payments/create', paymentData, { https: true });
       if (response.data.success) {
-        setMessage('Payment initiated successfully');
+        setMessage(<span style={{ color: 'green', fontWeight: 'bold' }}>Payment initiated successfully!</span>);
         setPayment({
           amount: '',
           currency: 'ZAR', 
@@ -62,7 +62,9 @@ function Dashboard() {
           beneficiaryAccountNumber: '',
           swiftCode: ''
         });
-        navigate('/dashboard');
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2500);
       }
     } catch (err) {
       setMessage(err.response?.data?.message || 'Payment failed');
