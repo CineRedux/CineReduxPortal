@@ -27,3 +27,19 @@ export const createPayment = async (req, res) => {
     res.status(500).json({ success: false, message: 'Payment failed', "error" : err });
   }
 };
+
+export const getPaymentsByUser = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const payments = await Payment.find({ userId });
+
+    if (!payments) {
+      return res.status(404).json({ success: false, message: 'No payments found for this user' });
+    }
+
+    res.status(200).json({ success: true, payments });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error fetching payments', error: err });
+  }
+};
