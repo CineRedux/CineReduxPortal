@@ -5,31 +5,31 @@ import { validationResult } from 'express-validator';
 
 
 // Register user
-export const registerUser = async (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
+// export const registerUser = async (req, res) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//         return res.status(400).json({ errors: errors.array() });
+//     }
 
-    const { email, fullName, idNumber, accountNumber, password } = req.body;
+//     const { email, fullName, idNumber, accountNumber, password } = req.body;
 
-    try {
-        const username = email;
+//     try {
+//         const username = email;
         
-        const existingUser = await User.findOne({ username });
-        if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
+//         const existingUser = await User.findOne({ username });
+//         if (existingUser) {
+//             return res.status(400).json({ message: 'User already exists' });
+//         }
 
 
-        const newUser = new User({ email, fullName, idNumber, accountNumber, username, password });
-        await newUser.save();
+//         const newUser = new User({ email, fullName, idNumber, accountNumber, username, password });
+//         await newUser.save();
 
-        res.status(201).json({ message: 'User registered successfully!', username });
-    } catch (err) {
-        res.status(500).json({ error: 'Registration failed', err });
-    }
-};
+//         res.status(201).json({ message: 'User registered successfully!', username });
+//     } catch (err) {
+//         res.status(500).json({ error: 'Registration failed', err });
+//     }
+// };
 
 // Login user
 export const loginUser = async (req, res) => {
