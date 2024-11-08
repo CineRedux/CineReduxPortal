@@ -9,10 +9,10 @@ function Login({setIsLoggedIn}) {
   const [form, setForm] = useState({
     username: '',
     accountNumber: '',
-    password: ''
+    password: '',
+    role: 'customer' // Default role
   });
   const [error, setError] = useState('');
-
 
   const regex = {
     username: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
@@ -27,7 +27,7 @@ function Login({setIsLoggedIn}) {
 
   const validate = () => {
     for (let key in form) {
-      if (!regex[key].test(form[key])) {
+      if (key !== 'role' && !regex[key].test(form[key])) {
         setError(`Invalid ${key}`);
         return false;
       }
@@ -50,8 +50,7 @@ function Login({setIsLoggedIn}) {
     } catch (err) {
       setError('Login failed, please check your credentials');
     }
-};
-
+  };
 
   return (
     <div className="form-container">
@@ -70,11 +69,18 @@ function Login({setIsLoggedIn}) {
           Password:
           <input type="password" name="password" value={form.password} onChange={handleChange} required />
         </label>
+        <label>
+          Role:
+          <select name="role" value={form.role} onChange={handleChange} required>
+            <option value="customer">Customer</option>
+            <option value="employee">Employee</option>
+          </select>
+        </label>
         <button type="submit">Login</button>
       </form>
-      <p className="register-link" onClick={() => navigate('/register')}>
-          Don't have an account? <span>Create one</span>
-      </p>
+      {/* <p className="register-link" onClick={() => navigate('/register')}>
+        Don't have an account? <span>Create one</span>
+      </p> */}
     </div>
   );
 }
