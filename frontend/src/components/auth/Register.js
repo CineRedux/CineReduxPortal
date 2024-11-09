@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import api from '../axiosConfig';
-import './styles/App.css';
+import api from '../../axiosConfig';
+import '../styles/App.css';
 import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
 

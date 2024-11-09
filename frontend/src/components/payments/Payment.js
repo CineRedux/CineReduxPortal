@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import api from '../axiosConfig';
+import api from '../../axiosConfig';
 import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 

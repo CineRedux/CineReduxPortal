@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import api from '../axiosConfig';
+import api from '../../axiosConfig';
 import { useNavigate } from 'react-router-dom';
 import DOMPurify from 'dompurify';
-import './styles/Login.css';
+import '../styles/Login.css';
 
 function Login({setIsLoggedIn}) {
   const navigate = useNavigate();

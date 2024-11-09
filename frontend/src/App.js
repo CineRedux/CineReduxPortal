@@ -3,9 +3,9 @@ import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from
 import './App.css'; 
 
 import Home from './components/Home';
-import Register from './components/Register';
-import Login from './components/Login';
-import Payment from './components/Payment';
+import Register from './components/auth/Register';
+import Login from './components/auth/Login';
+import Payment from './components/payments/Payment';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';  
 

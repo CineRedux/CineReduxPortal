@@ -30,10 +30,10 @@ import bcrypt from 'bcrypt';
 
 // Login user
 export const loginUser = async (req, res) => {
-    const { username, accountNumber, password } = req.body;
+    const { username, accountNumber, password, role } = req.body;
 
     try {
-        const user = await User.findOne({ username, accountNumber });
+        const user = await User.findOne({ username, accountNumber, role });
         if (!user) return res.status(400).json({ message: 'Invalid credentials' });
 
         const isMatch = await bcrypt.compare(password, user.password);

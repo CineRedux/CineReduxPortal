@@ -18,6 +18,7 @@ router.post('/login', [
     body('username').isLength({ min: 1 }).withMessage('Username is required'),
     body('accountNumber').isLength({ min: 1 }).withMessage('Account number is required'),
     body('password').exists().withMessage('Password is required'),
+    body('role').isIn(['customer', 'employee']).exists().withMessage('Role is required'),
 ], loginUser);
 
 export default router;
