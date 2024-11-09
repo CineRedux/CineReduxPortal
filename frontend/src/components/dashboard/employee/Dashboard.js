@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import api from '../axiosConfig';
+import api from '../../../axiosConfig';
 
-const Dashboard = () => {
+const EmployeeDashboard = () => {
   const [payments, setPayments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ const Dashboard = () => {
     const fetchPayments = async () => {
       const token = sessionStorage.getItem('token'); // Assuming the token is stored in sessionStorage
       try {
-        const response = await api.get('/api/payments', {
+        const response = await api.get('/api/payments/all', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -92,4 +92,4 @@ const styles = {
   },
 };
 
-export default Dashboard;
+export default EmployeeDashboard;

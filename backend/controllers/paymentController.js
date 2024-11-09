@@ -28,6 +28,24 @@ export const createPayment = async (req, res) => {
   }
 };
 
+export const getPayments = async (req, res) => {
+  try {
+    
+    if (req.user.role !== 'employee') {
+      return res.status(403).json({ success: false, message: 'Access denied' });
+    }
+
+    const payments = await Payment.find();
+    if (!payments) {
+      return res.status(404).json({ success: false, message: 'No payments found' });
+    }
+
+    res.status(200).json({ success: true, payments });
+  } catch (err) {
+    res.status(500).json({ success: false, message: 'Error fetching payments', error: err });
+  }
+}
+
 export const getPaymentsByUser = async (req, res) => {
   try {
     const userId = req.user.id;

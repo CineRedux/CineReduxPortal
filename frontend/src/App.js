@@ -1,26 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import './App.css'; 
 
 import Home from './components/Home';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Payment from './components/payments/Payment';
-import Dashboard from './components/Dashboard';
+import CustomerDashboard from './components/dashboard/customer/Dashboard';
+import EmployeeDashboard from './components/dashboard/employee/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';  
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
-    setIsLoggedIn(!!token);
+    if (token) {
+      const decoded = jwtDecode(token);
+      setRole(decoded.role);
+      setIsLoggedIn(true);
+    }
   }, []);
 
   const handleLogout = () => {
     // Clear sessionStorage and set login state to false
     sessionStorage.removeItem('token');
     setIsLoggedIn(false);
+    setRole(null);
   };
 
   return (
@@ -28,7 +36,7 @@ function App() {
       <div className="App">
         <header className="App-header">
           <nav>
-            <ClickableH1 isLoggedIn={isLoggedIn} handleLogout={handleLogout} />
+            <ClickableH1 isLoggedIn={isLoggedIn} handleLogout={handleLogout} role={role} />
           </nav>
         </header>
 
@@ -38,10 +46,18 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
             <Route 
-              path="/dashboard" 
+              path="/dashboard/customer/dashboard" 
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <CustomerDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/dashboard/employee/dashboard" 
+              element={
+                <ProtectedRoute>
+                  <EmployeeDashboard />
                 </ProtectedRoute>
               } 
             />
@@ -63,11 +79,12 @@ function App() {
     </Router>
   );
 }
-function ClickableH1({ isLoggedIn, handleLogout }) {
+function ClickableH1({ isLoggedIn, handleLogout, role }) {
   const navigate = useNavigate();
   const handleClick = () => {
     if (isLoggedIn) {
-      navigate('/dashboard');
+      let path = `/dashboard/${role}/dashboard`;
+      navigate(path);
     } else {
       navigate('/');
     }
