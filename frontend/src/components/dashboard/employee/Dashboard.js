@@ -7,6 +7,16 @@ const EmployeeDashboard = () => {
   const [error, setError] = useState(null);
   const [editingPayment, setEditingPayment] = useState(null);
 
+  const currencies = ['ZAR', 'USD', 'EUR', 'GBP', 'AUD'];
+
+  const regex = {
+    amount: /^\d+(\.\d{1,2})?$/,
+    currency: /^[A-Z]{3}$/,
+    beneficiaryName: /^[a-zA-Z\s]+$/,
+    beneficiaryAccountNumber: /^\d{10,12}$/,
+    swiftCode: /^[A-Z]{6}[A-Z0-9]{2,5}$/
+  };
+
   useEffect(() => {
     fetchPayments();
   }, []);
@@ -33,6 +43,13 @@ const EmployeeDashboard = () => {
   };
 
   const handleUpdate = async () => {
+    for (let key in regex) {
+      if (regex[key] && !regex[key].test(editingPayment[key])) {
+        setError(`Invalid ${key}`);
+        return;
+      }
+    }
+
     const token = sessionStorage.getItem('token');
     try {
       await api.put(`/api/payments/${editingPayment._id}`, editingPayment, {
@@ -42,9 +59,10 @@ const EmployeeDashboard = () => {
         },
       });
       setEditingPayment(null);
+      setError(null);
       fetchPayments();
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.message || 'Update failed');
     }
   };
 
@@ -86,42 +104,76 @@ const EmployeeDashboard = () => {
             <div key={payment._id} style={styles.paymentCard}>
               {editingPayment && editingPayment._id === payment._id ? (
                 <div style={styles.editForm}>
-                  <input
-                    name="amount"
-                    value={editingPayment.amount}
-                    onChange={handleChange}
-                    style={styles.input}
-                  />
-                  <input
-                    name="currency"
-                    value={editingPayment.currency}
-                    onChange={handleChange}
-                    style={styles.input}
-                  />
-                  <input
-                    name="provider"
-                    value={editingPayment.provider}
-                    onChange={handleChange}
-                    style={styles.input}
-                  />
-                  <input
-                    name="beneficiaryName"
-                    value={editingPayment.beneficiaryName}
-                    onChange={handleChange}
-                    style={styles.input}
-                  />
-                  <input
-                    name="beneficiaryAccountNumber"
-                    value={editingPayment.beneficiaryAccountNumber}
-                    onChange={handleChange}
-                    style={styles.input}
-                  />
-                  <input
-                    name="swiftCode"
-                    value={editingPayment.swiftCode}
-                    onChange={handleChange}
-                    style={styles.input}
-                  />
+                  <label style={styles.label}>
+                    Amount:
+                    <input
+                      type="text"
+                      name="amount"
+                      value={editingPayment.amount}
+                      onChange={handleChange}
+                      style={styles.input}
+                      required
+                    />
+                  </label>
+                  <label style={styles.label}>
+                    Currency:
+                    <select
+                      name="currency"
+                      value={editingPayment.currency}
+                      onChange={handleChange}
+                      style={styles.input}
+                      required
+                    >
+                      {currencies.map((currency) => (
+                        <option key={currency} value={currency}>{currency}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label style={styles.label}>
+                    Provider:
+                    <select
+                      name="provider"
+                      value={editingPayment.provider}
+                      onChange={handleChange}
+                      style={styles.input}
+                      required
+                    >
+                      <option value="SWIFT">SWIFT</option>
+                    </select>
+                  </label>
+                  <label style={styles.label}>
+                    Beneficiary Name:
+                    <input
+                      type="text"
+                      name="beneficiaryName"
+                      value={editingPayment.beneficiaryName}
+                      onChange={handleChange}
+                      style={styles.input}
+                      required
+                    />
+                  </label>
+                  <label style={styles.label}>
+                    Beneficiary Account Number:
+                    <input
+                      type="text"
+                      name="beneficiaryAccountNumber"
+                      value={editingPayment.beneficiaryAccountNumber}
+                      onChange={handleChange}
+                      style={styles.input}
+                      required
+                    />
+                  </label>
+                  <label style={styles.label}>
+                    SWIFT Code:
+                    <input
+                      type="text"
+                      name="swiftCode"
+                      value={editingPayment.swiftCode}
+                      onChange={handleChange}
+                      style={styles.input}
+                      required
+                    />
+                  </label>
                   <div style={styles.buttonContainer}>
                     <button onClick={handleUpdate} style={styles.saveButton}>Save</button>
                     <button onClick={() => setEditingPayment(null)} style={styles.cancelButton}>Cancel</button>
@@ -222,6 +274,20 @@ const styles = {
   },
   editForm: {
     padding: '10px',
+  },
+  label: {
+    display: 'block',
+    marginBottom: '10px',
+    fontSize: '1rem',
+    fontWeight: 'bold',
+  },
+  input: {
+    width: '100%',
+    padding: '8px',
+    margin: '5px 0',
+    borderRadius: '4px',
+    border: '1px solid #ddd',
+    fontSize: '1rem',
   },
 };
 
