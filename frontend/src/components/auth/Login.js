@@ -44,8 +44,9 @@ function Login({setIsLoggedIn}) {
       const response = await api.post('/api/users/login', form, { https: true });
       if (response.data.message === "Success") {
         sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('userRole', response.data.role);
         setIsLoggedIn(true);
-        navigate('/payment');
+        navigate('/dashboard');
       }
     } catch (err) {
       setError('Login failed, please check your credentials');

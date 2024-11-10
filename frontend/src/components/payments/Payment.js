@@ -51,7 +51,13 @@ function Dashboard() {
       const userId = decoded.id;
       const paymentData = { ...payment, userId };
 
-      const response = await api.post('/api/payments/create', paymentData, { https: true });
+      const response = await api.post('/api/payments', paymentData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
+      
       if (response.data.success) {
         setMessage(<span style={{ color: 'green', fontWeight: 'bold' }}>Payment initiated successfully!</span>);
         setPayment({

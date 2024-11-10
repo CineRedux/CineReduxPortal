@@ -7,8 +7,7 @@ import Home from './components/Home';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Payment from './components/payments/Payment';
-import CustomerDashboard from './components/dashboard/customer/Dashboard';
-import EmployeeDashboard from './components/dashboard/employee/Dashboard';
+import DashboardRouter from './components/dashboard/DashboardRouter';
 import ProtectedRoute from './components/ProtectedRoute';  
 
 function App() {
@@ -45,18 +44,10 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login setIsLoggedIn={setIsLoggedIn} />} />
             <Route 
-              path="/dashboard/customer/dashboard" 
+              path="/dashboard" 
               element={
                 <ProtectedRoute>
-                  <CustomerDashboard />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/dashboard/employee/dashboard" 
-              element={
-                <ProtectedRoute>
-                  <EmployeeDashboard />
+                  <DashboardRouter />
                 </ProtectedRoute>
               } 
             />
@@ -82,8 +73,7 @@ function ClickableH1({ isLoggedIn, handleLogout, role }) {
   const navigate = useNavigate();
   const handleClick = () => {
     if (isLoggedIn) {
-      let path = `/dashboard/${role}/dashboard`;
-      navigate(path);
+      navigate('/dashboard');
     } else {
       navigate('/');
     }

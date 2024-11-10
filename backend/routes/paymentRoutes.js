@@ -1,14 +1,20 @@
 // routes/paymentRoutes.js
 import express from 'express';
-import { createPayment, getPayments, getPaymentsByUser } from '../controllers/paymentController.js';
-import { authMiddleware } from '../middlewares/authMiddleware.js';
+import verifyToken from '../middlewares/authMiddleware.js';
+import { 
+  createPayment, 
+  getPayments, 
+  getPaymentsByUser, 
+  updatePayment, 
+  deletePayment 
+} from '../controllers/paymentController.js';
 
 const router = express.Router();
 
-// POST /api/payments/create
-router.post('/create', createPayment);
-
-router.get('/user' , authMiddleware, getPaymentsByUser);
-router.get('/all', authMiddleware, getPayments)
+router.post('/', verifyToken, createPayment);
+router.get('/user', verifyToken, getPaymentsByUser);
+router.get('/all', verifyToken, getPayments);
+router.put('/:id', verifyToken, updatePayment);
+router.delete('/:id', verifyToken, deletePayment);
 
 export default router;

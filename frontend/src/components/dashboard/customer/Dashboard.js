@@ -7,42 +7,32 @@ const CustomerDashboard = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPayments = async () => {
-      const token = sessionStorage.getItem('token'); // Assuming the token is stored in sessionStorage
-      try {
-        const response = await api.get('/api/payments/user', {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        if (!response.status === 200) {
-          throw new Error('Failed to fetch payments');
-        }
-
-        setPayments(response.data.payments);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPayments();
   }, []);
 
-  if (loading) {
-    return <p>Loading payments...</p>;
-  }
+  const fetchPayments = async () => {
+    const token = sessionStorage.getItem('token');
+    try {
+      const response = await api.get('/api/payments/user', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      setPayments(response.data.payments);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (error) {
-    return <p>Error: {error}</p>;
-  }
+  if (loading) return <p>Loading payments...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div style={styles.dashboardContainer}>
-      <h1 style={styles.title}>Payments</h1>
+      <h1 style={styles.title}>Your Payments</h1>
       {payments.length === 0 ? (
         <p>No payments available</p>
       ) : (
