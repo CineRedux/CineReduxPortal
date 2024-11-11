@@ -58,6 +58,7 @@ function App() {
                 </ProtectedRoute>
               } 
             />
+            <Route path="*" element={<RedirectToHome />} />
           </Routes>
         </main>
 
@@ -67,6 +68,16 @@ function App() {
       </div>
     </Router>
   );
+}
+function RedirectToHome() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Redirect to home page and update the URL
+    navigate('/');
+  }, [navigate]);
+
+  return null; // No UI is rendered, just the redirect happens
 }
 function ClickableH1({ isLoggedIn, handleLogout, role }) {
   const navigate = useNavigate();
