@@ -4,7 +4,6 @@ import { jwtDecode } from 'jwt-decode';
 import './App.css'; 
 
 import Home from './components/Home';
-import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 import Payment from './components/payments/Payment';
 import DashboardRouter from './components/dashboard/DashboardRouter';
