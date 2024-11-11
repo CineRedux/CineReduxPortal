@@ -162,6 +162,10 @@ Ensure the backend API is properly set up with the following routes:
 
 You can find the backend source code or API details in the linked repository (not included in this README).
 
+## YouTube Video
+
+https://youtu.be/otMc5gph7AE
+
 ## Team Members
 
 This project is a collaborative effort by the following team members:
@@ -169,4 +173,5 @@ This project is a collaborative effort by the following team members:
 - **Ted Ngobeni** - ST10027949
 - **Tshiamo Thekiso** - ST10132516
 - **Motjoka Fanana** - ST10089515
+
 
