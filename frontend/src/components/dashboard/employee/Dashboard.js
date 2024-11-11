@@ -1,4 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
+import { Skeleton } from "../../../components/ui/skeleton";
+import { AlertCircle, CheckCircle, Edit, Trash2 } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "../../../components/ui/alert";
 import api from '../../../axiosConfig';
 
 const EmployeeDashboard = () => {
@@ -90,205 +94,189 @@ const EmployeeDashboard = () => {
     });
   };
 
-  if (loading) return <p>Loading payments...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) {
+    return (
+      <div className="container mx-auto mt-8 px-4">
+        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">All Payments</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, index) => (
+            <Card key={index} className="w-full">
+              <CardHeader className="space-y-2">
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-3/4" />
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto mt-8 px-4">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      </div>
+    );
+  }
 
   return (
-    <div style={styles.dashboardContainer}>
-      <h1 style={styles.title}>All Payments</h1>
+    <div className="container mx-auto mt-8 px-4">
+      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">All Payments</h1>
       {payments.length === 0 ? (
-        <p>No payments available</p>
+        <p className="text-center text-gray-600">No payments available</p>
       ) : (
-        <div style={styles.paymentList}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {payments.map((payment) => (
-            <div key={payment._id} style={styles.paymentCard}>
+            <Card key={payment._id} className="w-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
               {editingPayment && editingPayment._id === payment._id ? (
-                <div style={styles.editForm}>
-                  <label style={styles.label}>
-                    Amount:
-                    <input
-                      type="text"
-                      name="amount"
-                      value={editingPayment.amount}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required
-                    />
-                  </label>
-                  <label style={styles.label}>
-                    Currency:
-                    <select
-                      name="currency"
-                      value={editingPayment.currency}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required
-                    >
-                      {currencies.map((currency) => (
-                        <option key={currency} value={currency}>{currency}</option>
-                      ))}
-                    </select>
-                  </label>
-                  <label style={styles.label}>
-                    Provider:
-                    <select
-                      name="provider"
-                      value={editingPayment.provider}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required
-                    >
-                      <option value="SWIFT">SWIFT</option>
-                    </select>
-                  </label>
-                  <label style={styles.label}>
-                    Beneficiary Name:
-                    <input
-                      type="text"
-                      name="beneficiaryName"
-                      value={editingPayment.beneficiaryName}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required
-                    />
-                  </label>
-                  <label style={styles.label}>
-                    Beneficiary Account Number:
-                    <input
-                      type="text"
-                      name="beneficiaryAccountNumber"
-                      value={editingPayment.beneficiaryAccountNumber}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required
-                    />
-                  </label>
-                  <label style={styles.label}>
-                    SWIFT Code:
-                    <input
-                      type="text"
-                      name="swiftCode"
-                      value={editingPayment.swiftCode}
-                      onChange={handleChange}
-                      style={styles.input}
-                      required
-                    />
-                  </label>
-                  <div style={styles.buttonContainer}>
-                    <button onClick={handleUpdate} style={styles.saveButton}>Save</button>
-                    <button onClick={() => setEditingPayment(null)} style={styles.cancelButton}>Cancel</button>
+                <CardContent className="space-y-4 p-6">
+                  <div className="space-y-3">
+                    <label className="block">
+                      <span className="text-gray-700">Amount:</span>
+                      <input
+                        type="text"
+                        name="amount"
+                        value={editingPayment.amount}
+                        onChange={handleChange}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="text-gray-700">Currency:</span>
+                      <select
+                        name="currency"
+                        value={editingPayment.currency}
+                        onChange={handleChange}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      >
+                        {currencies.map((currency) => (
+                          <option key={currency} value={currency}>{currency}</option>
+                        ))}
+                      </select>
+                    </label>
+                    <label className="block">
+                      <span className="text-gray-700">Provider:</span>
+                      <select
+                        name="provider"
+                        value={editingPayment.provider}
+                        onChange={handleChange}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      >
+                        <option value="SWIFT">SWIFT</option>
+                      </select>
+                    </label>
+                    <label className="block">
+                      <span className="text-gray-700">Beneficiary Name:</span>
+                      <input
+                        type="text"
+                        name="beneficiaryName"
+                        value={editingPayment.beneficiaryName}
+                        onChange={handleChange}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="text-gray-700">Beneficiary Account Number:</span>
+                      <input
+                        type="text"
+                        name="beneficiaryAccountNumber"
+                        value={editingPayment.beneficiaryAccountNumber}
+                        onChange={handleChange}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      />
+                    </label>
+                    <label className="block">
+                      <span className="text-gray-700">SWIFT Code:</span>
+                      <input
+                        type="text"
+                        name="swiftCode"
+                        value={editingPayment.swiftCode}
+                        onChange={handleChange}
+                        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                      />
+                    </label>
+                    <div className="flex justify-end space-x-2 mt-4">
+                      <button
+                        onClick={handleUpdate}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                      >
+                        Save
+                      </button>
+                      <button
+                        onClick={() => setEditingPayment(null)}
+                        className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+                      >
+                        Cancel
+                      </button>
+                    </div>
                   </div>
-                </div>
+                </CardContent>
               ) : (
                 <>
-                  <p style={styles.paymentField}><strong>Amount:</strong> {payment.amount} {payment.currency}</p>
-                  <p style={styles.paymentField}><strong>Provider:</strong> {payment.provider}</p>
-                  <p style={styles.paymentField}><strong>Beneficiary Name:</strong> {payment.beneficiaryName}</p>
-                  <p style={styles.paymentField}><strong>Beneficiary Account:</strong> {payment.beneficiaryAccountNumber}</p>
-                  <p style={styles.paymentField}><strong>SWIFT Code:</strong> {payment.swiftCode}</p>
-                  <p style={styles.paymentField}><strong>Date:</strong> {new Date(payment.createdAt).toLocaleString()}</p>
-                  <div style={styles.buttonContainer}>
-                    <button onClick={() => handleEdit(payment)} style={styles.editButton}>Edit</button>
-                    <button onClick={() => handleDelete(payment._id)} style={styles.deleteButton}>Delete</button>
-                  </div>
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <span className="text-lg font-semibold text-blue-600">
+                        {payment.amount} {payment.currency}
+                      </span>
+                      <CheckCircle className="h-5 w-5 text-green-500" />
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <dl className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <dt className="font-medium text-gray-500">Provider:</dt>
+                        <dd className="text-gray-700">{payment.provider}</dd>
+                      </div>
+                      <div className="flex justify-between">
+                        <dt className="font-medium text-gray-500">Beneficiary:</dt>
+                        <dd className="text-gray-700">{payment.beneficiaryName}</dd>
+                      </div>
+                      <div className="flex justify-between">
+                        <dt className="font-medium text-gray-500">Account:</dt>
+                        <dd className="text-gray-700">{payment.beneficiaryAccountNumber}</dd>
+                      </div>
+                      <div className="flex justify-between">
+                        <dt className="font-medium text-gray-500">SWIFT:</dt>
+                        <dd className="text-gray-700">{payment.swiftCode}</dd>
+                      </div>
+                      <div className="flex justify-between">
+                        <dt className="font-medium text-gray-500">Date:</dt>
+                        <dd className="text-gray-700">{new Date(payment.createdAt).toLocaleString()}</dd>
+                      </div>
+                    </dl>
+                    <div className="flex justify-end space-x-2 mt-4">
+                      <button
+                        onClick={() => handleEdit(payment)}
+                        className="p-2 text-blue-600 hover:text-blue-800 bg-white border-2 border-blue-600 rounded-md hover:bg-blue-50 transition-colors duration-200"
+                      >
+                        <Edit className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(payment._id)}
+                        className="p-2 text-red-600 hover:text-red-800 bg-white border-2 border-red-600 rounded-md hover:bg-red-50 transition-colors duration-200"
+                      >
+                        <Trash2 className="h-5 w-5" />
+                      </button>
+                    </div>
+                  </CardContent>
                 </>
               )}
-            </div>
+            </Card>
           ))}
         </div>
       )}
     </div>
   );
-};
-
-const styles = {
-  dashboardContainer: {
-    textAlign: 'center',
-    marginTop: '50px',
-  },
-  title: {
-    fontSize: '2.5rem',
-    marginBottom: '20px',
-  },
-  paymentList: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '20px',
-  },
-  paymentCard: {
-    backgroundColor: '#f9f9f9',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    maxWidth: '300px',
-    textAlign: 'left',
-  },
-  paymentField: {
-    margin: '10px 0',
-    fontSize: '1.1rem',
-  },
-  input: {
-    width: '100%',
-    padding: '8px',
-    margin: '5px 0',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-  },
-  buttonContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    marginTop: '10px',
-  },
-  editButton: {
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  deleteButton: {
-    backgroundColor: '#f44336',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  saveButton: {
-    backgroundColor: '#4CAF50',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  cancelButton: {
-    backgroundColor: '#808080',
-    color: 'white',
-    border: 'none',
-    padding: '8px 16px',
-    borderRadius: '4px',
-    cursor: 'pointer',
-  },
-  editForm: {
-    padding: '10px',
-  },
-  label: {
-    display: 'block',
-    marginBottom: '10px',
-    fontSize: '1rem',
-    fontWeight: 'bold',
-  },
-  input: {
-    width: '100%',
-    padding: '8px',
-    margin: '5px 0',
-    borderRadius: '4px',
-    border: '1px solid #ddd',
-    fontSize: '1rem',
-  },
 };
 
 export default EmployeeDashboard;

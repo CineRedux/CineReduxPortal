@@ -1,85 +1,114 @@
-import React, { useEffect, useState } from 'react';
-import api from '../../../axiosConfig';
+import { useEffect, useState } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card"
+import { Skeleton } from "../../../components/ui/skeleton"
+import { AlertCircle, CheckCircle } from "lucide-react"
+import { Alert, AlertDescription, AlertTitle } from "../../../components/ui/alert"
+import api from '../../../axiosConfig'
 
-const CustomerDashboard = () => {
-  const [payments, setPayments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+export default function CustomerDashboard() {
+  const [payments, setPayments] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    fetchPayments();
-  }, []);
+    fetchPayments()
+  }, [])
 
   const fetchPayments = async () => {
-    const token = sessionStorage.getItem('token');
+    const token = sessionStorage.getItem('token')
     try {
       const response = await api.get('/api/payments/user', {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-      });
-      setPayments(response.data.payments);
+      })
+      setPayments(response.data.payments)
     } catch (err) {
-      setError(err.message);
+      setError(err.message)
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
-  };
+  }
 
-  if (loading) return <p>Loading payments...</p>;
-  if (error) return <p>Error: {error}</p>;
+  if (loading) {
+    return (
+      <div className="container mx-auto mt-8 px-4">
+        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Your Payments</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(3)].map((_, index) => (
+            <Card key={index} className="w-full">
+              <CardHeader className="space-y-2">
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-3/4" />
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-2/3" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="container mx-auto mt-8 px-4">
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{error}</AlertDescription>
+        </Alert>
+      </div>
+    )
+  }
 
   return (
-    <div style={styles.dashboardContainer}>
-      <h1 style={styles.title}>Your Payments</h1>
+    <div className="container mx-auto mt-8 px-4">
+      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Your Payments</h1>
       {payments.length === 0 ? (
-        <p>No payments available</p>
+        <p className="text-center text-gray-600">No payments available</p>
       ) : (
-        <div style={styles.paymentList}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {payments.map((payment) => (
-            <div key={payment._id} style={styles.paymentCard}>
-              <p style={styles.paymentField}><strong>Amount:</strong> {payment.amount} {payment.currency}</p>
-              <p style={styles.paymentField}><strong>Provider:</strong> {payment.provider}</p>
-              <p style={styles.paymentField}><strong>Beneficiary Name:</strong> {payment.beneficiaryName}</p>
-              <p style={styles.paymentField}><strong>Beneficiary Account:</strong> {payment.beneficiaryAccountNumber}</p>
-              <p style={styles.paymentField}><strong>SWIFT Code:</strong> {payment.swiftCode}</p>
-              <p style={styles.paymentField}><strong>Date:</strong> {new Date(payment.createdAt).toLocaleString()}</p>
-            </div>
+            <Card key={payment._id} className="w-full bg-white shadow-lg hover:shadow-xl transition-shadow duration-300">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  <span className="text-lg font-semibold text-blue-600">{payment.amount} {payment.currency}</span>
+                  <CheckCircle className="h-5 w-5 text-green-500" />
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <dl className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <dt className="font-medium text-gray-500">Provider:</dt>
+                    <dd className="text-gray-700">{payment.provider}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="font-medium text-gray-500">Beneficiary:</dt>
+                    <dd className="text-gray-700">{payment.beneficiaryName}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="font-medium text-gray-500">Account:</dt>
+                    <dd className="text-gray-700">{payment.beneficiaryAccountNumber}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="font-medium text-gray-500">SWIFT:</dt>
+                    <dd className="text-gray-700">{payment.swiftCode}</dd>
+                  </div>
+                  <div className="flex justify-between">
+                    <dt className="font-medium text-gray-500">Date:</dt>
+                    <dd className="text-gray-700">{new Date(payment.createdAt).toLocaleString()}</dd>
+                  </div>
+                </dl>
+              </CardContent>
+            </Card>
           ))}
         </div>
       )}
     </div>
-  );
-};
-
-const styles = {
-  dashboardContainer: {
-    textAlign: 'center',
-    marginTop: '50px',
-  },
-  title: {
-    fontSize: '2.5rem',
-    marginBottom: '20px',
-  },
-  paymentList: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: '20px',
-  },
-  paymentCard: {
-    backgroundColor: '#f9f9f9',
-    padding: '20px',
-    borderRadius: '8px',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    maxWidth: '300px',
-    textAlign: 'left',
-  },
-  paymentField: {
-    margin: '10px 0',
-    fontSize: '1.1rem',
-  },
-};
-
-export default CustomerDashboard;
+  )
+}
