@@ -34,7 +34,7 @@ jobs:
   build:
     # Build frontend and backend, then deploy
     docker:
-      - image: cimg/base:stable
+      - image: cimg/node:22.11.0
     steps:
       - checkout:
           path: ~/project
