@@ -1,3 +1,5 @@
+# This config was automatically generated from your source code
+# Stacks detected: deps:node:backend
 version: 2.1
 orbs:
   node: circleci/node@5
@@ -48,7 +50,6 @@ jobs:
             cd frontend
             npm install
             npm run build
-
 workflows:
   build-and-test:
     jobs:
@@ -57,4 +58,4 @@ workflows:
       - build:
           requires:
             - test-node
-            - lint-and-test-frontend
+            - lint-frontend
