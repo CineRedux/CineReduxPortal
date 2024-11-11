@@ -2,13 +2,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Skeleton } from "../ui/skeleton"
 import { AlertCircle, CheckCircle } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert"
+import PropTypes from 'prop-types'
 
-export default function PaymentsList({ payments, loading, error }) {
+export default function PaymentsList({ payments = [], loading, error }) {
   if (loading) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, index) => (
-          <Card key={index} className="w-full">
+        {[1, 2, 3].map((num) => (
+          <Card key={`skeleton-${num}`} className="w-full">
             <CardHeader className="space-y-2">
               <Skeleton className="h-4 w-1/2" />
               <Skeleton className="h-4 w-3/4" />
@@ -34,7 +35,7 @@ export default function PaymentsList({ payments, loading, error }) {
     )
   }
 
-  if (payments.length === 0) {
+  if (!payments || payments.length === 0) {
     return <p className="text-center text-gray-600">No payments available</p>
   }
 
@@ -76,4 +77,26 @@ export default function PaymentsList({ payments, loading, error }) {
       ))}
     </div>
   )
+}
+
+PaymentsList.propTypes = {
+  payments: PropTypes.arrayOf(
+    PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      amount: PropTypes.number.isRequired,
+      currency: PropTypes.string.isRequired,
+      provider: PropTypes.string.isRequired,
+      beneficiaryName: PropTypes.string.isRequired,
+      beneficiaryAccountNumber: PropTypes.string.isRequired,
+      swiftCode: PropTypes.string.isRequired,
+      createdAt: PropTypes.string.isRequired,
+    })
+  ),
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+}
+
+PaymentsList.defaultProps = {
+  payments: [],
+  error: null,
 } 

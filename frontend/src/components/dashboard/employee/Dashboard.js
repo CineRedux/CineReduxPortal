@@ -99,8 +99,8 @@ const EmployeeDashboard = () => {
       <div className="container mx-auto mt-8 px-4">
         <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">All Payments</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(3)].map((_, index) => (
-            <Card key={index} className="w-full">
+          {[1, 2, 3].map((num) => (
+            <Card key={`loading-skeleton-${num}`} className="w-full">
               <CardHeader className="space-y-2">
                 <Skeleton className="h-4 w-1/2" />
                 <Skeleton className="h-4 w-3/4" />
