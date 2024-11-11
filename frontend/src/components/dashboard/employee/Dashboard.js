@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { usePayments } from '../../../hooks/usePayments';
+import DashboardLayout from '../DashboardLayout';
 import { Card, CardContent, CardHeader, CardTitle } from "../../../components/ui/card";
-import { Skeleton } from "../../../components/ui/skeleton";
-import { AlertCircle, CheckCircle, Edit, Trash2 } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "../../../components/ui/alert";
+import { CheckCircle, Edit, Trash2 } from "lucide-react";
 import api from '../../../axiosConfig';
 
 const EmployeeDashboard = () => {
-  const [payments, setPayments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { payments, loading, error, fetchPayments } = usePayments('/api/payments/all');
   const [editingPayment, setEditingPayment] = useState(null);
+  const [updateError, setUpdateError] = useState(null);
 
   const currencies = ['ZAR', 'USD', 'EUR', 'GBP', 'AUD'];
 
@@ -21,27 +20,6 @@ const EmployeeDashboard = () => {
     swiftCode: /^[A-Z]{6}[A-Z0-9]{2,5}$/
   };
 
-  useEffect(() => {
-    fetchPayments();
-  }, []);
-
-  const fetchPayments = async () => {
-    const token = sessionStorage.getItem('token');
-    try {
-      const response = await api.get('/api/payments/all', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      setPayments(response.data.payments);
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleEdit = (payment) => {
     setEditingPayment({ ...payment });
   };
@@ -49,7 +27,7 @@ const EmployeeDashboard = () => {
   const handleUpdate = async () => {
     for (let key in regex) {
       if (regex[key] && !regex[key].test(editingPayment[key])) {
-        setError(`Invalid ${key}`);
+        setUpdateError(`Invalid ${key}`);
         return;
       }
     }
@@ -63,10 +41,10 @@ const EmployeeDashboard = () => {
         },
       });
       setEditingPayment(null);
-      setError(null);
+      setUpdateError(null);
       fetchPayments();
     } catch (err) {
-      setError(err.response?.data?.message || 'Update failed');
+      setUpdateError(err.response?.data?.message || 'Update failed');
     }
   };
 
@@ -83,7 +61,7 @@ const EmployeeDashboard = () => {
       });
       fetchPayments();
     } catch (err) {
-      setError(err.message);
+      setUpdateError(err.message);
     }
   };
 
@@ -94,44 +72,13 @@ const EmployeeDashboard = () => {
     });
   };
 
-  if (loading) {
-    return (
-      <div className="container mx-auto mt-8 px-4">
-        <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">All Payments</h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[1, 2, 3].map((num) => (
-            <Card key={`loading-skeleton-${num}`} className="w-full">
-              <CardHeader className="space-y-2">
-                <Skeleton className="h-4 w-1/2" />
-                <Skeleton className="h-4 w-3/4" />
-              </CardHeader>
-              <CardContent className="space-y-2">
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-full" />
-                <Skeleton className="h-4 w-2/3" />
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="container mx-auto mt-8 px-4">
-        <Alert variant="destructive">
-          <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto mt-8 px-4">
-      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">All Payments</h1>
+    <DashboardLayout title="All Payments" loading={loading} error={error}>
+      {updateError && (
+        <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+          {updateError}
+        </div>
+      )}
       {payments.length === 0 ? (
         <p className="text-center text-gray-600">No payments available</p>
       ) : (
@@ -275,7 +222,7 @@ const EmployeeDashboard = () => {
           ))}
         </div>
       )}
-    </div>
+    </DashboardLayout>
   );
 };
 
